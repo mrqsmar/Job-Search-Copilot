@@ -5,6 +5,7 @@ import SkillTag from "../components/SkillTag";
 function JDParser() {
   const [jdText, setJdText] = useState("");
   const [result, setResult] = useState(null);
+  const [validation, setValidation] = useState(null);
   const [loading, setLoading] = useState(false);
   const [error, setError] = useState("");
 
@@ -16,9 +17,11 @@ function JDParser() {
     setLoading(true);
     setError("");
     setResult(null);
+    setValidation(null);
     try {
       const res = await parseJobDescription(jdText);
-      setResult(res.data);
+      setResult(res.data.parsed);
+      setValidation(res.data.validation);
     } catch (e) {
       setError(e.message);
     } finally {
@@ -49,6 +52,17 @@ function JDParser() {
 
       {result && (
         <div className="result-card">
+          {validation && !validation.is_valid && validation.issues?.length > 0 && (
+            <div className="validation-banner">
+              <strong>Auto-corrected</strong> — the QA pass found issues:
+              <ul>
+                {validation.issues.map((issue, i) => (
+                  <li key={i}>{issue}</li>
+                ))}
+              </ul>
+            </div>
+          )}
+
           <h3>
             {result.title || "Parsed Job Description"}
             {result.company && ` — ${result.company}`}
