@@ -10,6 +10,10 @@ class JobMatchInput(BaseModel):
     job_description: str
 
 
+class JDParserInput(BaseModel):
+    jd_text: str
+
+
 class HealthResponse(BaseModel):
     status: str
     version: str

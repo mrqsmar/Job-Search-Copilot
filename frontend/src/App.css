@@ -347,3 +347,16 @@ label {
   background: #3b1e1e;
   color: #fca5a5;
 }
+
+/* JD Parser meta */
+.jd-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.jd-meta-item strong {
+  color: var(--text);
+}

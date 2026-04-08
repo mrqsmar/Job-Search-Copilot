@@ -1,8 +1,9 @@
 from fastapi import APIRouter, HTTPException
 
-from app.models.schemas import ResumeInput, JobMatchInput
+from app.models.schemas import ResumeInput, JobMatchInput, JDParserInput
 from app.services.resume_analyzer import analyze_resume
 from app.services.job_matcher import match_job
+from app.services.jd_parser import parse_job_description
 
 router = APIRouter(prefix="/api", tags=["resume"])
 
@@ -30,6 +31,20 @@ def api_match_job(payload: JobMatchInput):
         )
     try:
         result = match_job(payload.resume_text, payload.job_description)
+        return {"success": True, "data": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/parse-jd")
+def api_parse_jd(payload: JDParserInput):
+    """Parse a job description and return structured data."""
+    if not payload.jd_text.strip():
+        raise HTTPException(
+            status_code=400, detail="Job description text cannot be empty"
+        )
+    try:
+        result = parse_job_description(payload.jd_text)
         return {"success": True, "data": result}
     except Exception as e:
         raise HTTPException(status_code=500, detail=str(e))
