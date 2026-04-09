@@ -347,3 +347,36 @@ label {
   background: #3b1e1e;
   color: #fca5a5;
 }
+
+/* JD Parser meta */
+.jd-meta {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 1rem;
+  font-size: 0.875rem;
+  color: var(--text-muted);
+}
+
+.jd-meta-item strong {
+  color: var(--text);
+}
+
+/* Validation banner */
+.validation-banner {
+  background: #3b2f1e;
+  border: 1px solid var(--amber);
+  border-radius: var(--radius);
+  padding: 0.75rem 1rem;
+  margin-bottom: 1rem;
+  font-size: 0.825rem;
+  color: #fbbf24;
+}
+
+.validation-banner ul {
+  margin-top: 0.35rem;
+  padding-left: 1.25rem;
+}
+
+.validation-banner li {
+  margin-bottom: 0.15rem;
+}
