@@ -21,6 +21,12 @@ class ResumeBulletsInput(BaseModel):
     story_bank: list
 
 
+class ProfessionalSummaryInput(BaseModel):
+    parsed_jd: dict
+    match_result: dict
+    master_resume: str
+
+
 class HealthResponse(BaseModel):
     status: str
     version: str

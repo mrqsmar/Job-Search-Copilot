@@ -5,11 +5,13 @@ from app.models.schemas import (
     JobMatchInput,
     JDParserInput,
     ResumeBulletsInput,
+    ProfessionalSummaryInput,
 )
 from app.services.resume_analyzer import analyze_resume
 from app.services.job_matcher import match_job
 from app.services.jd_parser import parse_job_description
 from app.services.resume_bullet_generator import generate_resume_bullets
+from app.services.professional_summary_generator import generate_professional_summary
 
 router = APIRouter(prefix="/api", tags=["resume"])
 
@@ -71,6 +73,26 @@ def api_generate_resume_bullets(payload: ResumeBulletsInput):
             match_result=payload.match_result,
             master_resume=payload.master_resume,
             story_bank=payload.story_bank,
+        )
+        return {"success": True, "data": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/generate-professional-summary")
+def api_generate_professional_summary(payload: ProfessionalSummaryInput):
+    """Generate a tailored professional summary for a specific job application."""
+    if not payload.master_resume.strip():
+        raise HTTPException(status_code=400, detail="Master resume cannot be empty")
+    if not payload.parsed_jd:
+        raise HTTPException(status_code=400, detail="parsed_jd cannot be empty")
+    if not payload.match_result:
+        raise HTTPException(status_code=400, detail="match_result cannot be empty")
+    try:
+        result = generate_professional_summary(
+            parsed_jd=payload.parsed_jd,
+            match_result=payload.match_result,
+            master_resume=payload.master_resume,
         )
         return {"success": True, "data": result}
     except Exception as e:
