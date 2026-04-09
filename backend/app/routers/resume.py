@@ -6,12 +6,14 @@ from app.models.schemas import (
     JDParserInput,
     ResumeBulletsInput,
     ProfessionalSummaryInput,
+    RecruiterOutreachInput,
 )
 from app.services.resume_analyzer import analyze_resume
 from app.services.job_matcher import match_job
 from app.services.jd_parser import parse_job_description
 from app.services.resume_bullet_generator import generate_resume_bullets
 from app.services.professional_summary_generator import generate_professional_summary
+from app.services.recruiter_outreach_generator import generate_recruiter_outreach
 
 router = APIRouter(prefix="/api", tags=["resume"])
 
@@ -93,6 +95,27 @@ def api_generate_professional_summary(payload: ProfessionalSummaryInput):
             parsed_jd=payload.parsed_jd,
             match_result=payload.match_result,
             master_resume=payload.master_resume,
+        )
+        return {"success": True, "data": result}
+    except Exception as e:
+        raise HTTPException(status_code=500, detail=str(e))
+
+
+@router.post("/generate-recruiter-outreach")
+def api_generate_recruiter_outreach(payload: RecruiterOutreachInput):
+    """Generate a tailored recruiter outreach message for a specific role."""
+    if not payload.candidate_name.strip():
+        raise HTTPException(status_code=400, detail="candidate_name cannot be empty")
+    if not payload.parsed_jd:
+        raise HTTPException(status_code=400, detail="parsed_jd cannot be empty")
+    if not payload.match_result:
+        raise HTTPException(status_code=400, detail="match_result cannot be empty")
+    try:
+        result = generate_recruiter_outreach(
+            parsed_jd=payload.parsed_jd,
+            match_result=payload.match_result,
+            candidate_name=payload.candidate_name,
+            recruiter_name=payload.recruiter_name,
         )
         return {"success": True, "data": result}
     except Exception as e:

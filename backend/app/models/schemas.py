@@ -27,6 +27,13 @@ class ProfessionalSummaryInput(BaseModel):
     master_resume: str
 
 
+class RecruiterOutreachInput(BaseModel):
+    parsed_jd: dict
+    match_result: dict
+    candidate_name: str
+    recruiter_name: str | None = None
+
+
 class HealthResponse(BaseModel):
     status: str
     version: str
