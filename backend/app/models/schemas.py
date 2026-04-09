@@ -14,6 +14,13 @@ class JDParserInput(BaseModel):
     jd_text: str
 
 
+class ResumeBulletsInput(BaseModel):
+    parsed_jd: dict
+    match_result: dict
+    master_resume: str
+    story_bank: list
+
+
 class HealthResponse(BaseModel):
     status: str
     version: str
